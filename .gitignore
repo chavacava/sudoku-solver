@@ -1,0 +1,14 @@
+/target
+/build
+/local
+
+# Eclipse, Netbeans and IntelliJ files
+/.*
+!.devcontainer
+!.gitignore
+!.dockerignore
+!.mvn
+/nbproject
+/*.ipr
+/*.iws
+/*.iml

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class SudokuSolverApp {
     private static final int BLOCK_SIZE = 3; // cells
-    private static final int PUZZLE_SIZE = 2; // blocks
+    private static final int PUZZLE_SIZE = 3; // blocks
     private static final Logger LOGGER = LoggerFactory.getLogger(SudokuSolverApp.class);
     private static String lb = System.getProperty("line.separator");
 
@@ -28,8 +28,7 @@ public class SudokuSolverApp {
                 .withSolutionClass(Puzzle.class)
                 .withEntityClasses(Cell.class)
                 .withConstraintProviderClass(SudokuConstraintsProvider.class)
-                .withEnvironmentMode(EnvironmentMode.FULL_ASSERT)
-                .withTerminationSpentLimit(Duration.ofSeconds(120)));
+                .withTerminationSpentLimit(Duration.ofSeconds(4000)));
 
         ScoreManager<Puzzle, HardSoftScore> scoreManager = ScoreManager.create(solverFactory);
        
@@ -80,24 +79,40 @@ public class SudokuSolverApp {
         Cell[] cells = createCells(PUZZLE_SIZE,BLOCK_SIZE);
         cells[0].pinWith(5);
         cells[1].pinWith(3);        
-        cells[6].pinWith(6);        
+        cells[4].pinWith(7);
+        cells[9].pinWith(6);        
+        cells[12].pinWith(1);        
         cells[13].pinWith(9);        
-        cells[14].pinWith(8);        
-        cells[4].pinWith(7);        
-        cells[9].pinWith(1);        
-        cells[10].pinWith(9);        
-        cells[11].pinWith(5);        
-        cells[18].pinWith(8);        
-        cells[24].pinWith(4);        
-        cells[30].pinWith(7);        
-        cells[22].pinWith(6);        
+        cells[14].pinWith(5);        
+        cells[19].pinWith(9);        
+        cells[20].pinWith(8);        
+        cells[25].pinWith(6);        
         cells[27].pinWith(8);        
-        cells[29].pinWith(3);        
-        cells[34].pinWith(2);        
+        cells[31].pinWith(6);        
+        cells[35].pinWith(3);        
+        cells[36].pinWith(4);
+        cells[39].pinWith(8);
+        cells[41].pinWith(3);
+        cells[44].pinWith(1);
+        cells[45].pinWith(7);
+        cells[49].pinWith(2);
+        cells[53].pinWith(6);
+        cells[55].pinWith(6);
+        cells[60].pinWith(2);
+        cells[61].pinWith(8);
+        cells[66].pinWith(4);
+        cells[67].pinWith(1);
+        cells[68].pinWith(9);
+        cells[71].pinWith(5);
+        cells[76].pinWith(8);
+        cells[79].pinWith(7);
+        cells[80].pinWith(9);
 
         List<Integer> values = new ArrayList<>();
-        for (int i = 1; i <= (9*PUZZLE_SIZE); i++) {
-            values.add((i%9)+1);            
+        int cellsPerBlock = BLOCK_SIZE*BLOCK_SIZE;
+        int totalBlocks = PUZZLE_SIZE*PUZZLE_SIZE;
+        for (int i = 1; i <= (cellsPerBlock*totalBlocks); i++) {
+            values.add((i%cellsPerBlock)+1);            
         }
                         
         return new Puzzle(values, cells);

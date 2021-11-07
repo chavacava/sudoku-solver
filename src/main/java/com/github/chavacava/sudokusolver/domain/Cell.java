@@ -1,4 +1,4 @@
-package org.acme.sudokusolver.domain;
+package com.github.chavacava.sudokusolver.domain;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.entity.PlanningPin;

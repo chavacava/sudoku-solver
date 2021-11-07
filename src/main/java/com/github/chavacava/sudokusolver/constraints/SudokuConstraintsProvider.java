@@ -1,6 +1,6 @@
-package org.acme.sudokusolver.constraints;
+package com.github.chavacava.sudokusolver.constraints;
 
-import org.acme.sudokusolver.domain.Cell;
+import com.github.chavacava.sudokusolver.domain.Cell;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;

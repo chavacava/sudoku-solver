@@ -1,7 +1,7 @@
-package org.acme.sudokusolver.constraints;
+package com.github.chavacava.sudokusolver.constraints;
 
-import org.acme.sudokusolver.domain.Cell;
-import org.acme.sudokusolver.domain.Puzzle;
+import com.github.chavacava.sudokusolver.domain.Cell;
+import com.github.chavacava.sudokusolver.domain.Puzzle;
 import org.junit.jupiter.api.Test;
 import org.optaplanner.test.api.score.stream.ConstraintVerifier;
 

@@ -1,13 +1,13 @@
-package org.acme.sudokusolver;
+package com.github.chavacava.sudokusolver;
 
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.acme.sudokusolver.constraints.SudokuConstraintsProvider;
-import org.acme.sudokusolver.domain.Puzzle;
-import org.acme.sudokusolver.domain.Cell;
+import com.github.chavacava.sudokusolver.constraints.SudokuConstraintsProvider;
+import com.github.chavacava.sudokusolver.domain.Puzzle;
+import com.github.chavacava.sudokusolver.domain.Cell;
 import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.Solver;
@@ -29,7 +29,7 @@ public class SudokuSolverApp {
                 .withEntityClasses(Cell.class)
                 .withConstraintProviderClass(SudokuConstraintsProvider.class)
                 .withEnvironmentMode(EnvironmentMode.FULL_ASSERT)
-                .withTerminationSpentLimit(Duration.ofSeconds(60)));
+                .withTerminationSpentLimit(Duration.ofSeconds(120)));
 
         ScoreManager<Puzzle, HardSoftScore> scoreManager = ScoreManager.create(solverFactory);
        

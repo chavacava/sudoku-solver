@@ -61,6 +61,8 @@ public class SudokuSolverApp {
             col++;
             if (col % blockSize == 0) {
                 result.append("|");
+            }else{
+                result.append(" ");
             }
             if (col == puzzleSize*blockSize ) {
                 result.append(lb);
@@ -68,7 +70,7 @@ public class SudokuSolverApp {
                 row++;
             }
             if (row == blockSize ) {
-                result.append("-".repeat(puzzleSize*blockSize+puzzleSize)+lb);
+                result.append("-".repeat(puzzleSize*blockSize*2)+lb);
                 row = 0;
             }                        
         }

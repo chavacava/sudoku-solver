@@ -12,10 +12,10 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @PlanningSolution
 public class Puzzle {
     @ProblemFactCollectionProperty
-    @ValueRangeProvider(id = "valuesRange")
+    @ValueRangeProvider(id = "values")
     private List<Value> values;
     @PlanningEntityCollectionProperty
-    private List<Cell> cells;
+    private Cell[] cells;
 
     @PlanningScore
     private HardSoftScore score;
@@ -23,7 +23,7 @@ public class Puzzle {
     public Puzzle() {
     }
 
-    public Puzzle(List<Value> values, List<Cell> cells) {
+    public Puzzle(List<Value> values, Cell[] cells) {
         this.values = values;
         this.cells = cells;
     }
@@ -32,7 +32,12 @@ public class Puzzle {
         return score;
     }
 
-    public List<Cell> getCells() {
+    public Cell[] getCells() {
         return cells;
+    }
+
+    @Override
+    public String toString() {
+        return "Puzzle [\n\tcells=" + cells + "\n\tscore=" + score + "\n\tvalues=" + values + "]";
     }    
 }

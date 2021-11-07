@@ -12,14 +12,13 @@ public class SudokuConstraintsProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[] {
                 // Hard constraints
-                blockCells(constraintFactory),                
-                emptyCells(constraintFactory),                
+                conflictingCellsInBlock(constraintFactory),                
                 conflictingColCells(constraintFactory),
                 conflictingRowCells(constraintFactory)
         };
     }
 
-    Constraint blockCells(ConstraintFactory constraintFactory) {
+    Constraint conflictingCellsInBlock(ConstraintFactory constraintFactory) {
         return constraintFactory
                 .fromUniquePair(Cell.class,
                         Joiners.equal(Cell::getBlock)
@@ -31,7 +30,6 @@ public class SudokuConstraintsProvider implements ConstraintProvider {
         return constraintFactory
                 .fromUniquePair(Cell.class,
                         Joiners.equal(Cell::getCol))
-                        .filter((c1,c2) -> c1.getBlock().getCol() == c2.getBlock().getCol())                        
                         .filter((c1,c2) -> c1.getValue().getValue() == c2.getValue().getValue())
                         .penalize("Conflicting value in col", HardSoftScore.ONE_HARD);
     }
@@ -40,16 +38,7 @@ public class SudokuConstraintsProvider implements ConstraintProvider {
         return constraintFactory
                 .fromUniquePair(Cell.class,
                         Joiners.equal(Cell::getRow))
-                        .filter((c1,c2) -> c1.getBlock().getRow() == c2.getBlock().getRow())                        
                         .filter((c1,c2) -> c1.getValue().getValue() == c2.getValue().getValue())
                         .penalize("Conflicting value in row", HardSoftScore.ONE_HARD);
     }
-
-    Constraint emptyCells(ConstraintFactory constraintFactory) {
-        return constraintFactory
-                .from(Cell.class)
-                        .filter(c -> c.getValue() == null)                        
-                .penalize("Null cell", HardSoftScore.ONE_SOFT);
-    }
-
 }

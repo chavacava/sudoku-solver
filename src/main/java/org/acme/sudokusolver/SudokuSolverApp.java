@@ -8,18 +8,19 @@ import java.util.List;
 import org.acme.sudokusolver.constraints.SudokuConstraintsProvider;
 import org.acme.sudokusolver.domain.Puzzle;
 import org.acme.sudokusolver.domain.Value;
-import org.acme.sudokusolver.domain.Block;
 import org.acme.sudokusolver.domain.Cell;
 import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SudokuSolverApp {
-    
+    private static final int BLOCK_SIZE = 3; // cells
+    private static final int PUZZLE_SIZE = 2; // blocks
     private static final Logger LOGGER = LoggerFactory.getLogger(SudokuSolverApp.class);
     private static String lb = System.getProperty("line.separator");
 
@@ -28,13 +29,16 @@ public class SudokuSolverApp {
                 .withSolutionClass(Puzzle.class)
                 .withEntityClasses(Cell.class)
                 .withConstraintProviderClass(SudokuConstraintsProvider.class)
-                .withTerminationSpentLimit(Duration.ofSeconds(5)));
+                .withEnvironmentMode(EnvironmentMode.FULL_ASSERT)
+                .withTerminationSpentLimit(Duration.ofSeconds(60)));
 
         ScoreManager<Puzzle, HardSoftScore> scoreManager = ScoreManager.create(solverFactory);
        
         // Load the problem
         Puzzle problem = loadData();
 
+        LOGGER.info(lb+dumpPuzzle(problem, BLOCK_SIZE,PUZZLE_SIZE));
+        
         // Solve the problem
         Solver<Puzzle> solver = solverFactory.buildSolver();
         Puzzle solution = solver.solve(problem);
@@ -46,51 +50,75 @@ public class SudokuSolverApp {
             LOGGER.info(scoreManager.explainScore(solution).getSummary());
         }
 
-        int j=0;
-        for (Cell cell : problem.getCells()) {
-            String val = cell.getValue()==null? "_":cell.getValue()+"";
-            System.out.print(val+" ");
-            if (++j >2) {
-                System.out.println();
-                j=0;
+        LOGGER.info(lb+dumpPuzzle(solution, BLOCK_SIZE,PUZZLE_SIZE));
+    }
+
+    private static String dumpPuzzle(Puzzle puzzle, int blockSize, int puzzleSize) {
+        StringBuilder result = new StringBuilder();
+        Cell[] cells = puzzle.getCells();
+        int col = 0;
+        int row = 0;
+        for (int i = 0; i < cells.length; i++) {
+            result.append(cells[i]);
+            col++;
+            if (col % blockSize == 0) {
+                result.append("|");
             }
+            if (col == puzzleSize*blockSize ) {
+                result.append(lb);
+                col = 0;
+                row++;
+            }
+            if (row == blockSize ) {
+                result.append("-".repeat(puzzleSize*blockSize+puzzleSize)+lb);
+                row = 0;
+            }                        
         }
+        return result.toString();
     }
 
     public static Puzzle loadData() {
-        List<Cell> cells = new ArrayList<>();
-
-        Block block00 = new Block(0, 0);                
-        cells.add(new Cell(0, block00, 0, 0));
-        cells.add(new Cell(1, block00, 1, 0));
-        cells.add(new Cell(2, block00, 2, 0));
-        cells.add(new Cell(3, block00, 0, 1));
-        cells.add(new Cell(4, block00, 1, 1,new Value(1)));
-        cells.add(new Cell(5, block00, 2, 1,new Value(2)));
-        cells.add(new Cell(6, block00, 0, 2));
-        cells.add(new Cell(7, block00, 1, 2));
-        cells.add(new Cell(8, block00, 2, 2));
-
-        Block block01 = new Block(0, 1);                
-        cells.add(new Cell(9, block01, 0, 0));
-        cells.add(new Cell(10, block01, 1, 0));
-        cells.add(new Cell(11, block01, 2, 0));
-        cells.add(new Cell(12, block01, 0, 1));
-        cells.add(new Cell(13, block01, 1, 1));
-        cells.add(new Cell(14, block01, 2, 1));
-        cells.add(new Cell(15, block01, 0, 2));
-        cells.add(new Cell(16, block01, 1, 2));
-        cells.add(new Cell(17, block01, 2, 2));
+        Cell[] cells = createCells(PUZZLE_SIZE,BLOCK_SIZE);
+        cells[0].pinWith(new Value(5));
+        cells[1].pinWith(new Value(3));        
+        cells[6].pinWith(new Value(6));        
+        cells[13].pinWith(new Value(9));        
+        cells[14].pinWith(new Value(8));        
+        cells[4].pinWith(new Value(7));        
+        cells[9].pinWith(new Value(1));        
+        cells[10].pinWith(new Value(9));        
+        cells[11].pinWith(new Value(5));        
+        cells[18].pinWith(new Value(8));        
+        cells[24].pinWith(new Value(4));        
+        cells[30].pinWith(new Value(7));        
+        cells[22].pinWith(new Value(6));        
+        cells[27].pinWith(new Value(8));        
+        cells[29].pinWith(new Value(3));        
+        cells[34].pinWith(new Value(2));        
 
         List<Value> values = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            values.add(new Value(i));            
-            values.add(new Value(i));
-            values.add(new Value(i));
+        for (int i = 1; i <= (9*PUZZLE_SIZE); i++) {
+            values.add(new Value((i%9)+1));            
         }
-        
-                
+                        
         return new Puzzle(values, cells);
     }
   
+    private static Cell[] createCells(int puzzleSize, int blockSize) {
+        Cell[] result = new Cell[puzzleSize*puzzleSize*blockSize*blockSize];
+        int col = 0;
+        int row = 0;        
+        for (int i = 0; i < result.length; i++) {            
+            if (col == puzzleSize*blockSize ) {
+                row++;
+                col = 0;
+            }
+            int blockCol = col/blockSize;
+            int blockRow = row/blockSize;   
+            int blockId = blockRow*10+blockCol;
+            result[i] = new Cell(i,blockId, col, row);
+            col++;
+        }
+        return result;
+    }
 }

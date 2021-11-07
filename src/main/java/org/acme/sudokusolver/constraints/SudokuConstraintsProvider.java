@@ -22,7 +22,7 @@ public class SudokuConstraintsProvider implements ConstraintProvider {
         return constraintFactory
                 .fromUniquePair(Cell.class,
                         Joiners.equal(Cell::getBlock)
-                ).filter((c1,c2) -> c1.getValue().getValue() == c2.getValue().getValue())
+                ).filter((c1,c2) -> c1.getValue() == c2.getValue())
                 .penalize("Value is repeated in the block", HardSoftScore.ONE_HARD);
     }
 
@@ -30,7 +30,7 @@ public class SudokuConstraintsProvider implements ConstraintProvider {
         return constraintFactory
                 .fromUniquePair(Cell.class,
                         Joiners.equal(Cell::getCol))
-                        .filter((c1,c2) -> c1.getValue().getValue() == c2.getValue().getValue())
+                        .filter((c1,c2) -> c1.getValue() == c2.getValue())
                         .penalize("Conflicting value in col", HardSoftScore.ONE_HARD);
     }
 
@@ -38,7 +38,7 @@ public class SudokuConstraintsProvider implements ConstraintProvider {
         return constraintFactory
                 .fromUniquePair(Cell.class,
                         Joiners.equal(Cell::getRow))
-                        .filter((c1,c2) -> c1.getValue().getValue() == c2.getValue().getValue())
+                        .filter((c1,c2) -> c1.getValue()== c2.getValue())
                         .penalize("Conflicting value in row", HardSoftScore.ONE_HARD);
     }
 }

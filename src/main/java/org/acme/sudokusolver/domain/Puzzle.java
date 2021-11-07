@@ -13,7 +13,7 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 public class Puzzle {
     @ProblemFactCollectionProperty
     @ValueRangeProvider(id = "values")
-    private List<Value> values;
+    private List<Integer> values;
     @PlanningEntityCollectionProperty
     private Cell[] cells;
 
@@ -23,7 +23,7 @@ public class Puzzle {
     public Puzzle() {
     }
 
-    public Puzzle(List<Value> values, Cell[] cells) {
+    public Puzzle(List<Integer> values, Cell[] cells) {
         this.values = values;
         this.cells = cells;
     }

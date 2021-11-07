@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.acme.sudokusolver.constraints.SudokuConstraintsProvider;
 import org.acme.sudokusolver.domain.Puzzle;
-import org.acme.sudokusolver.domain.Value;
 import org.acme.sudokusolver.domain.Cell;
 import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
@@ -79,26 +78,26 @@ public class SudokuSolverApp {
 
     public static Puzzle loadData() {
         Cell[] cells = createCells(PUZZLE_SIZE,BLOCK_SIZE);
-        cells[0].pinWith(new Value(5));
-        cells[1].pinWith(new Value(3));        
-        cells[6].pinWith(new Value(6));        
-        cells[13].pinWith(new Value(9));        
-        cells[14].pinWith(new Value(8));        
-        cells[4].pinWith(new Value(7));        
-        cells[9].pinWith(new Value(1));        
-        cells[10].pinWith(new Value(9));        
-        cells[11].pinWith(new Value(5));        
-        cells[18].pinWith(new Value(8));        
-        cells[24].pinWith(new Value(4));        
-        cells[30].pinWith(new Value(7));        
-        cells[22].pinWith(new Value(6));        
-        cells[27].pinWith(new Value(8));        
-        cells[29].pinWith(new Value(3));        
-        cells[34].pinWith(new Value(2));        
+        cells[0].pinWith(5);
+        cells[1].pinWith(3);        
+        cells[6].pinWith(6);        
+        cells[13].pinWith(9);        
+        cells[14].pinWith(8);        
+        cells[4].pinWith(7);        
+        cells[9].pinWith(1);        
+        cells[10].pinWith(9);        
+        cells[11].pinWith(5);        
+        cells[18].pinWith(8);        
+        cells[24].pinWith(4);        
+        cells[30].pinWith(7);        
+        cells[22].pinWith(6);        
+        cells[27].pinWith(8);        
+        cells[29].pinWith(3);        
+        cells[34].pinWith(2);        
 
-        List<Value> values = new ArrayList<>();
+        List<Integer> values = new ArrayList<>();
         for (int i = 1; i <= (9*PUZZLE_SIZE); i++) {
-            values.add(new Value((i%9)+1));            
+            values.add((i%9)+1);            
         }
                         
         return new Puzzle(values, cells);

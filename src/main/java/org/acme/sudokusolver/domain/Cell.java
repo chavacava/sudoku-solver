@@ -15,7 +15,7 @@ public class Cell {
     private int block;
 
     @PlanningVariable(valueRangeProviderRefs = "values")
-    private Value value;
+    private Integer value;
     
     private boolean pinned;
 
@@ -57,15 +57,15 @@ public class Cell {
         return row;
     }
 
-    public Value getValue() {
+    public Integer getValue() {
         return this.value;
     }
 
-    public void setValue(Value value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 
-    public void pinWith(Value value) {
+    public void pinWith(Integer value) {
             this.value = value;
             this.pinned = true;
     }
